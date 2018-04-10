@@ -42,14 +42,17 @@ namespace Bullet_Hell
 
             //rotation = (float)Math.Atan2(moveDir.Y, moveDir.X);
 
-            if (Vector2.Distance(mousePos, position) < pixelToMove)
-            {
-                position = mousePos;
-            }
-            else
-            {
-                position += moveDir * pixelToMove;
-            }
+            //if (Vector2.Distance(mousePos, position) < pixelToMove)
+            //{
+            //    position = mousePos;
+            //}
+            //else
+            //{
+            //    position += moveDir * pixelToMove;
+            //}
+
+            position = mousePos;
+
 
             rectangle.Location = (position - offset * scale).ToPoint();
 
