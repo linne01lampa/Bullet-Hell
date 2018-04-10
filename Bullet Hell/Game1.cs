@@ -1,6 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Diagnostics;
+using System;
+using System.Collections.Generic;
 
 namespace Bullet_Hell
 {
@@ -11,11 +14,15 @@ namespace Bullet_Hell
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+
+        Dictionary<string, Texture2D> textures;
         
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            graphics.PreferredBackBufferWidth = 1440;
+            graphics.PreferredBackBufferHeight = 900;
         }
 
         /// <summary>
@@ -27,8 +34,12 @@ namespace Bullet_Hell
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            
+            textures = new Dictionary<string, Texture2D>();
             base.Initialize();
+
+            IsMouseVisible = true;
+
+            
         }
 
         /// <summary>
@@ -41,6 +52,7 @@ namespace Bullet_Hell
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+            textures.Add("player", Content.Load<Texture2D>("player"));
         }
 
         /// <summary>
@@ -63,6 +75,9 @@ namespace Bullet_Hell
                 Exit();
 
             // TODO: Add your update logic here
+            float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            MouseState mouseState = Mouse.GetState();
+
 
             base.Update(gameTime);
         }
@@ -76,6 +91,9 @@ namespace Bullet_Hell
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
+
+            spriteBatch.Begin();
+            Player.Draw(spriteBatch);
 
             base.Draw(gameTime);
         }
