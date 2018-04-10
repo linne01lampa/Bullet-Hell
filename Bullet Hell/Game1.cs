@@ -15,6 +15,10 @@ namespace Bullet_Hell
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        Player player;
+
+        Vector2 playerPos;
+
         Dictionary<string, Texture2D> textures;
         
         public Game1()
@@ -39,7 +43,7 @@ namespace Bullet_Hell
 
             IsMouseVisible = true;
 
-            
+            player = new Player(textures["player"], playerPos, new Vector2(10f, 10f), 200);
         }
 
         /// <summary>
@@ -78,6 +82,9 @@ namespace Bullet_Hell
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             MouseState mouseState = Mouse.GetState();
 
+            playerPos = mouseState.Position.ToVector2();
+
+            player.Update(deltaTime, playerPos);
 
             base.Update(gameTime);
         }
@@ -93,8 +100,8 @@ namespace Bullet_Hell
             // TODO: Add your drawing code here
 
             spriteBatch.Begin();
-            Player.Draw(spriteBatch);
-
+            player.Draw(spriteBatch);
+            spriteBatch.End();
             base.Draw(gameTime);
         }
     }

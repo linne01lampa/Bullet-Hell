@@ -20,8 +20,6 @@ namespace Bullet_Hell
         float speed;
         Color color;
 
-        SpriteBatch spriteBatch;
-
         public Player(Texture2D playerTexture, Vector2 startPosition, Vector2 playerScale, float playerSpeed)
         {
             texture = playerTexture;
@@ -42,7 +40,7 @@ namespace Bullet_Hell
             moveDir = mousePos - position;
             moveDir.Normalize();
 
-            rotation = (float)Math.Atan2(moveDir.Y, moveDir.X);
+            //rotation = (float)Math.Atan2(moveDir.Y, moveDir.X);
 
             if (Vector2.Distance(mousePos, position) < pixelToMove)
             {
