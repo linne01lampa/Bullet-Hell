@@ -23,6 +23,9 @@ namespace Bullet_Hell
 
         List<Enemy> enemies;
         Dictionary<string, Texture2D> textures;
+
+        Vector2 startPos;
+        Random rnd = new Random();
         
         public Game1()
         {
@@ -47,11 +50,12 @@ namespace Bullet_Hell
             IsMouseVisible = false;
 
             enemies = new List<Enemy>();
-            numEnemies = 2;
+            numEnemies = 5;
 
             for (int i = 0; i < numEnemies; i++)
             {
-                enemies.Add(new Enemy(textures["enemy"], new Vector2(5f, 5f), 0f, 100f, Vector2.Zero));
+                startPos = new Vector2(rnd.Next(0, 500), 0);
+                enemies.Add(new Enemy(textures["enemy"], new Vector2(5f, 5f), 0f, 100f, startPos));
             }
 
             player = new Player(textures["player"], playerPos, new Vector2(5f, 5f), 200);

@@ -23,10 +23,12 @@ namespace Bullet_Hell
         int turney = 1;
         bool turn;
 
+        Random rnd;
+
         bool started = false;
         Vector2 startPos;
 
-        public Enemy(Texture2D enemyTexture, Vector2 enemyScale, float enemyRotation, float enemyHealth, Vector2 enemyPosition)
+        public Enemy(Texture2D enemyTexture, Vector2 enemyScale, float enemyRotation, float enemyHealth, Vector2 enemyStartPos)
         {
             texture = enemyTexture;
             scale = enemyScale;
@@ -34,7 +36,8 @@ namespace Bullet_Hell
             health = enemyHealth;
             color = Color.White;
             rectangle = new Rectangle(position.ToPoint(), (texture.Bounds.Size.ToVector2() * scale).ToPoint());
-            startPos = new Vector2(100, 0);
+            rnd = new Random();
+            startPos = enemyStartPos;
         }
 
         public void Update(GameTime gameTime)
