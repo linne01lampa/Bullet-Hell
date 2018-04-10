@@ -10,27 +10,60 @@ namespace Bullet_Hell
 {
     public class Enemy
     {
-        private Vector2 postion;
-        private Texture2D texture;
-        private Rectangle rectangle;
-        private Vector2 scale;
-        private float rotation;
-        private Color color;
-        private float health;
+        Vector2 position;
+        Texture2D texture;
+        Rectangle rectangle;
+        Vector2 scale;
+        float rotation;
+        Color color;
+        float health;
 
-        public Enemy(Texture2D enemyTexture, Rectangle enemyRectangle)
+        Random rnd = new Random();
+
+        public Enemy(Texture2D enemyTexture, Vector2 enemyScale, float enemyRotation, float enemyHealth, Vector2 enemyPosition)
         {
-            throw new System.NotImplementedException();
+            texture = enemyTexture;
+            position = enemyPosition;
+            scale = enemyScale;
+            rotation = enemyRotation;
+            health = enemyHealth;
+            color = Color.White;
+            rectangle = new Rectangle(position.ToPoint(), (texture.Bounds.Size.ToVector2() * scale).ToPoint());
         }
 
-        public void Update()
+        public void Update(Enemy enemy)
         {
-            throw new System.NotImplementedException();
+            int random = rnd.Next(0, 4);
+
+            //Ner-höger
+            if (random == 0)
+            {
+                position.X = 3f;
+                position.Y = 3f;
+            }
+            //Ner-vänster
+            if (random == 1)
+            {
+                position.X = -3f;
+                position.Y = 3f;
+            }
+            //Upp-vänster
+            if (random == 2)
+            {
+                position.X = -3f;
+                position.Y = -3f;
+            }
+            //Upp-höger
+            if (random == 3)
+            {
+                position.X = 3f;
+                position.Y = -3f;
+            }
         }
 
-        public void Draw()
+        public void Draw(SpriteBatch spriteBatch)
         {
-            throw new System.NotImplementedException();
+            spriteBatch.Draw(texture, Vector2.Zero, null, color, rotation, Vector2.Zero, scale, SpriteEffects.None, 0);
         }
     }
 }

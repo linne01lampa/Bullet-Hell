@@ -29,7 +29,7 @@ namespace Bullet_Hell
             offset = playerTexture.Bounds.Size.ToVector2() * .5f;
             moveDir = Vector2.Zero;
             rotation = 0;
-            color = Color.White;
+            color = Color.Green;
             rectangle = new Rectangle(position.ToPoint(), (texture.Bounds.Size.ToVector2() * scale).ToPoint());
         }
 
@@ -55,8 +55,6 @@ namespace Bullet_Hell
 
 
             rectangle.Location = (position - offset * scale).ToPoint();
-
-            color = Color.White;
         }
 
         public void Draw(SpriteBatch spriteBatch)

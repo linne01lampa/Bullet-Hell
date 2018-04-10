@@ -19,14 +19,16 @@ namespace Bullet_Hell
 
         Vector2 playerPos;
 
+
+        List<Enemy> enemies;
         Dictionary<string, Texture2D> textures;
         
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            graphics.PreferredBackBufferWidth = 1440;
-            graphics.PreferredBackBufferHeight = 900;
+            graphics.PreferredBackBufferWidth = 580;
+            graphics.PreferredBackBufferHeight = 940;
         }
 
         /// <summary>
@@ -41,9 +43,16 @@ namespace Bullet_Hell
             textures = new Dictionary<string, Texture2D>();
             base.Initialize();
 
-            IsMouseVisible = true;
+            IsMouseVisible = false;
 
-            player = new Player(textures["player"], playerPos, new Vector2(10f, 10f), 200);
+            enemies = new List<Enemy>();
+
+            for (int i = 0; i < enemies.Count; i++)
+            {
+                enemies[i] = new Enemy(textures["enemy"], new Vector2(5f, 5f), 0f, 100f, Vector2.Zero);
+            }
+
+            player = new Player(textures["player"], playerPos, new Vector2(5f, 5f), 200);
         }
 
         /// <summary>
@@ -57,6 +66,7 @@ namespace Bullet_Hell
 
             // TODO: use this.Content to load your game content here
             textures.Add("player", Content.Load<Texture2D>("player"));
+            textures.Add("enemy", Content.Load<Texture2D>("bad"));
         }
 
         /// <summary>
@@ -86,6 +96,11 @@ namespace Bullet_Hell
 
             player.Update(deltaTime, playerPos);
 
+            for (int i = 0; i < enemies.Count; i++)
+            {
+                enemies[i].Update(enemies[i]);
+            }
+
             base.Update(gameTime);
         }
 
@@ -101,6 +116,10 @@ namespace Bullet_Hell
 
             spriteBatch.Begin();
             player.Draw(spriteBatch);
+            for (int i = 0; i < enemies.Count; i++)
+            {
+                enemies[i].Draw(spriteBatch);
+            }
             spriteBatch.End();
             base.Draw(gameTime);
         }
