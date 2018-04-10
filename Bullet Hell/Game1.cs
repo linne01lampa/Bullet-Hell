@@ -19,6 +19,7 @@ namespace Bullet_Hell
 
         Vector2 playerPos;
 
+        int numEnemies;
 
         List<Enemy> enemies;
         Dictionary<string, Texture2D> textures;
@@ -46,10 +47,11 @@ namespace Bullet_Hell
             IsMouseVisible = false;
 
             enemies = new List<Enemy>();
+            numEnemies = 2;
 
-            for (int i = 0; i < enemies.Count; i++)
+            for (int i = 0; i < numEnemies; i++)
             {
-                enemies[i] = new Enemy(textures["enemy"], new Vector2(5f, 5f), 0f, 100f, Vector2.Zero);
+                enemies.Add(new Enemy(textures["enemy"], new Vector2(5f, 5f), 0f, 100f, Vector2.Zero));
             }
 
             player = new Player(textures["player"], playerPos, new Vector2(5f, 5f), 200);
@@ -98,7 +100,7 @@ namespace Bullet_Hell
 
             for (int i = 0; i < enemies.Count; i++)
             {
-                enemies[i].Update(enemies[i]);
+                enemies[i].Update(gameTime);
             }
 
             base.Update(gameTime);

@@ -18,52 +18,78 @@ namespace Bullet_Hell
         Color color;
         float health;
 
-        Random rnd = new Random();
+        float time;
+        float timeTurn = 1;
+        int turney = 1;
+        bool turn;
+
+        bool started = false;
+        Vector2 startPos;
 
         public Enemy(Texture2D enemyTexture, Vector2 enemyScale, float enemyRotation, float enemyHealth, Vector2 enemyPosition)
         {
             texture = enemyTexture;
-            position = enemyPosition;
             scale = enemyScale;
             rotation = enemyRotation;
             health = enemyHealth;
             color = Color.White;
             rectangle = new Rectangle(position.ToPoint(), (texture.Bounds.Size.ToVector2() * scale).ToPoint());
+            startPos = new Vector2(100, 0);
         }
 
-        public void Update(Enemy enemy)
+        public void Update(GameTime gameTime)
         {
-            int random = rnd.Next(0, 4);
+            //timer.Update(gameTime, 2f);
+            if (started == false)
+            {
+                position = startPos;
+                started = true;
+            }
 
-            //Ner-höger
-            if (random == 0)
+            if (position.Y >= GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height - texture.Bounds.Size.Y)
             {
-                position.X = 3f;
-                position.Y = 3f;
+                started = false;
             }
-            //Ner-vänster
-            if (random == 1)
+
+            if (time <= 0)
             {
-                position.X = -3f;
-                position.Y = 3f;
+                time = timeTurn;
+                turney *= -1;
+                if (turney == 1)
+                {
+                    //position = new Vector2(10, 25);
+                    turn = true;
+                }
+                else if (turney == -1)
+                {
+                    //position = new Vector2(-10, 25);
+                    turn = false;
+                }
             }
-            //Upp-vänster
-            if (random == 2)
+            else if (time > 0)
             {
-                position.X = -3f;
-                position.Y = -3f;
+                time -= (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
-            //Upp-höger
-            if (random == 3)
+
+            if (turn == true)
             {
-                position.X = 3f;
-                position.Y = -3f;
+                //position = new Vector2(10, 25);
+                position.X += 1;
+                position.Y += 3;
             }
+            else if (turn == false)
+            {
+                //position = new Vector2(-10, 25);
+
+                position.X += -1;
+                position.Y += 3;
+            }
+
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, Vector2.Zero, null, color, rotation, Vector2.Zero, scale, SpriteEffects.None, 0);
+            spriteBatch.Draw(texture, position, null, color, rotation, Vector2.Zero, scale, SpriteEffects.None, 0);
         }
     }
 }
