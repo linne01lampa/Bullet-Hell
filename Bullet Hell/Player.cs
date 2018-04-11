@@ -19,6 +19,7 @@ namespace Bullet_Hell
         float rotation;
         float speed;
         Color color;
+        
 
         public Player(Texture2D playerTexture, Vector2 startPosition, Vector2 playerScale, float playerSpeed)
         {
@@ -60,6 +61,18 @@ namespace Bullet_Hell
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texture, position, null, color, rotation, offset, scale, SpriteEffects.None, 0);
+        }
+
+        public bool DetectCollision(Enemy enemy)
+        {
+            if (position.Y >= Bullet_Hell.Enemy.position.Y && position.X > Bullet_Hell.Enemy.position.X && position.X < (Bullet_Hell.Enemy.position.X + texture.Width))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

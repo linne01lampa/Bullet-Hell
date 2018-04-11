@@ -10,7 +10,7 @@ namespace Bullet_Hell
 {
     public class Enemy
     {
-        Vector2 position;
+        public static Vector2 position;
         Texture2D texture;
         Rectangle rectangle;
         Vector2 scale;

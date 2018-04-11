@@ -21,6 +21,9 @@ namespace Bullet_Hell
 
         int numEnemies;
 
+        float health;
+        bool show;
+
         List<Enemy> enemies;
         Dictionary<string, Texture2D> textures;
 
@@ -48,6 +51,9 @@ namespace Bullet_Hell
             base.Initialize();
 
             IsMouseVisible = false;
+
+            health = 1;
+            show = true;
 
             enemies = new List<Enemy>();
             numEnemies = 5;
@@ -105,6 +111,15 @@ namespace Bullet_Hell
             for (int i = 0; i < enemies.Count; i++)
             {
                 enemies[i].Update(gameTime);
+
+                if (player.DetectCollision(enemies[i]) == true)
+                {
+                    health--;
+                    if (health <= 0)
+                    {
+                        show = false;
+                    }
+                }
             }
 
             base.Update(gameTime);
@@ -121,7 +136,10 @@ namespace Bullet_Hell
             // TODO: Add your drawing code here
 
             spriteBatch.Begin();
-            player.Draw(spriteBatch);
+            if (show)
+            {
+                player.Draw(spriteBatch);
+            }
             for (int i = 0; i < enemies.Count; i++)
             {
                 enemies[i].Draw(spriteBatch);
