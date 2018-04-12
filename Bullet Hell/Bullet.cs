@@ -11,26 +11,30 @@ namespace Bullet_Hell
 {
     class Bullet
     {
-        Vector2 position;
+        float damage;
+        float speed;
         Texture2D texture;
         Rectangle rectangle;
-        float speed;
-        Color color;
-        Vector2 scale;
-        Vector2 moveDir;
-        Vector2 offset;
+        Vector2 dir;
+        Vector2 position;
 
-
-        public Bullet(Texture2D bulletTexture, Vector2 startPosition, Vector2 bulletScale, float bulletSpeed)
+        public Bullet(float bulletSpeed, Texture2D bulletTexture, float bulletDamage, Vector2 startDir, Vector2 startPosition)
         {
-            texture = bulletTexture;
-            position = startPosition;
-            scale = bulletScale;
             speed = bulletSpeed;
-            offset = bulletTexture.Bounds.Size.ToVector2() * .5f;
-            moveDir = Vector2.Zero;
-            color = Color.White;
-            rectangle = new Rectangle(position.ToPoint(), (texture.Bounds.Size.ToVector2() * scale).ToPoint());
+            texture = bulletTexture;
+            damage = bulletDamage;
+            dir = startDir;
+            position = startPosition;
+        }
+
+        public void Update(float deltaTime)
+        {
+            position += dir * speed * deltaTime;
+        }
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            spriteBatch.Draw(texture, position, Color.White);
         }
     }
 }

@@ -19,13 +19,15 @@ namespace Bullet_Hell
 
         Vector2 playerPos;
 
+        List<Rectangle> enemyRectagles;
+
         int numEnemies;
 
         float health;
         bool show;
 
         List<Enemy> enemies;
-        Dictionary<string, Texture2D> textures;
+        //Dictionary<string, Texture2D> textures;
 
         Vector2 startPos;
         Random rnd = new Random();
@@ -47,7 +49,6 @@ namespace Bullet_Hell
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            textures = new Dictionary<string, Texture2D>();
             base.Initialize();
 
             IsMouseVisible = false;
@@ -57,14 +58,16 @@ namespace Bullet_Hell
 
             enemies = new List<Enemy>();
             numEnemies = 5;
+            enemyRectagles = new List<Rectangle>();
 
             for (int i = 0; i < numEnemies; i++)
             {
+                enemyRectagles.Add(Enemy.rectangle);
                 startPos = new Vector2(rnd.Next(0, 500), 0);
-                enemies.Add(new Enemy(textures["enemy"], new Vector2(5f, 5f), 0f, 100f, startPos));
+                enemies.Add(new Enemy(TextureLibrary.GetTexture("player"), new Vector2(5f, 5f), 0f, 100f, startPos));
             }
 
-            player = new Player(textures["player"], playerPos, new Vector2(5f, 5f), 200);
+            player = new Player(TextureLibrary.GetTexture("player"), playerPos, new Vector2(5, 5), 200);
         }
 
         /// <summary>
@@ -77,8 +80,10 @@ namespace Bullet_Hell
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            textures.Add("player", Content.Load<Texture2D>("player"));
-            textures.Add("enemy", Content.Load<Texture2D>("bad"));
+            //textures.Add("player", Content.Load<Texture2D>("player"));
+            //textures.Add("enemy", Content.Load<Texture2D>("bad"));
+            TextureLibrary.LoadTexture(Content, "player");
+            TextureLibrary.LoadTexture(Content, "bad");
         }
 
         /// <summary>
@@ -110,16 +115,16 @@ namespace Bullet_Hell
 
             for (int i = 0; i < enemies.Count; i++)
             {
-                enemies[i].Update(gameTime);
+                enemies[i].Update(gameTime, deltaTime);
 
-                if (player.DetectCollision(enemies[i]) == true)
-                {
-                    health--;
-                    if (health <= 0)
-                    {
-                        show = false;
-                    }
-                }
+                //if (player.DetectCollision(enemies[i]) == true)
+                //{
+                //    health--;
+                //    if (health <= 0)
+                //    {
+                //        show = false;
+                //    }
+                //}
             }
 
             base.Update(gameTime);

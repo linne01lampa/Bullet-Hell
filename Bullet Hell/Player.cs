@@ -31,7 +31,7 @@ namespace Bullet_Hell
             moveDir = Vector2.Zero;
             rotation = 0;
             color = Color.Green;
-            rectangle = new Rectangle(position.ToPoint(), (texture.Bounds.Size.ToVector2() * scale).ToPoint());
+            rectangle = new Rectangle(position.ToPoint(), (texture.Bounds.Size.ToVector2()/* * scale*/).ToPoint());
         }
 
         public void Update(float deltaTime, Vector2 mousePos)
@@ -63,16 +63,16 @@ namespace Bullet_Hell
             spriteBatch.Draw(texture, position, null, color, rotation, offset, scale, SpriteEffects.None, 0);
         }
 
-        public bool DetectCollision(Enemy enemy)
-        {
-            if (position.Y >= Bullet_Hell.Enemy.position.Y && position.X > Bullet_Hell.Enemy.position.X && position.X < (Bullet_Hell.Enemy.position.X + texture.Width))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+        //public bool DetectCollision(Enemy enemy)
+        //{
+        //    if (position.Y >= Bullet_Hell.Enemy.position.Y && position.X > Bullet_Hell.Enemy.position.X && position.X < (Bullet_Hell.Enemy.position.X + texture.Width))
+        //    {
+        //        return true;
+        //    }
+        //    else
+        //    {
+        //        return false;
+        //    }
+        //}
     }
 }
