@@ -10,9 +10,9 @@ namespace Bullet_Hell
 {
     public class Enemy
     {
-        public static Vector2 position;
+        Vector2 position;
         Texture2D texture;
-        public static Rectangle rectangle;
+        Rectangle rectangle;
         Vector2 scale;
         float rotation;
         Color color;
@@ -32,6 +32,11 @@ namespace Bullet_Hell
         bool started = false;
         Vector2 startPos;
 
+        public Rectangle GetRectangle()
+        {
+            return rectangle;
+        }
+
         public Enemy(Texture2D enemyTexture, Vector2 enemyScale, float enemyRotation, float enemyHealth, Vector2 enemyStartPos)
         {
             texture = enemyTexture;
@@ -39,7 +44,7 @@ namespace Bullet_Hell
             rotation = enemyRotation;
             health = enemyHealth;
             color = Color.White;
-            rectangle = new Rectangle(position.ToPoint(), (texture.Bounds.Size.ToVector2() /** scale*/).ToPoint());
+            rectangle = new Rectangle(position.ToPoint(), (texture.Bounds.Size.ToVector2() * scale).ToPoint());
             rnd = new Random();
             startPos = enemyStartPos;
             bullets = new List<Bullet>();
@@ -55,6 +60,8 @@ namespace Bullet_Hell
                 bullets.Add(new Bullet(500, TextureLibrary.GetTexture("player"), 10, new Vector2(0,1), position));
                 attackTimer = 0;
             }
+
+            rectangle = new Rectangle(position.ToPoint(), (texture.Bounds.Size.ToVector2() * scale).ToPoint());
 
             for (int i = 0; i < bullets.Count; i++)
             {

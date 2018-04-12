@@ -14,7 +14,7 @@ namespace Bullet_Hell
         float damage;
         float speed;
         Texture2D texture;
-        Rectangle rectangle;
+        //Rectangle rectangle;
         Vector2 dir;
         Vector2 position;
 

@@ -19,7 +19,7 @@ namespace Bullet_Hell
         float rotation;
         float speed;
         Color color;
-        
+        bool alive;
 
         public Player(Texture2D playerTexture, Vector2 startPosition, Vector2 playerScale, float playerSpeed)
         {
@@ -31,12 +31,15 @@ namespace Bullet_Hell
             moveDir = Vector2.Zero;
             rotation = 0;
             color = Color.Green;
-            rectangle = new Rectangle(position.ToPoint(), (texture.Bounds.Size.ToVector2()/* * scale*/).ToPoint());
+            rectangle = new Rectangle(position.ToPoint(), (texture.Bounds.Size.ToVector2() * scale).ToPoint());
+            alive = true;
         }
 
-        public void Update(float deltaTime, Vector2 mousePos)
+        public void Update(float deltaTime, Vector2 mousePos, List<Enemy> enemies)
         {
             float pixelToMove = speed * deltaTime;
+
+            rectangle = new Rectangle(position.ToPoint(), (texture.Bounds.Size.ToVector2() * scale).ToPoint());
 
             moveDir = mousePos - position;
             moveDir.Normalize();
@@ -51,9 +54,14 @@ namespace Bullet_Hell
             //{
             //    position += moveDir * pixelToMove;
             //}
-
-            position = mousePos;
-
+            if (alive)
+            {
+                position = mousePos;
+            }
+            else
+            {
+                position = new Vector2(10000, 10000);
+            }
 
             rectangle.Location = (position - offset * scale).ToPoint();
         }
@@ -63,16 +71,15 @@ namespace Bullet_Hell
             spriteBatch.Draw(texture, position, null, color, rotation, offset, scale, SpriteEffects.None, 0);
         }
 
-        //public bool DetectCollision(Enemy enemy)
-        //{
-        //    if (position.Y >= Bullet_Hell.Enemy.position.Y && position.X > Bullet_Hell.Enemy.position.X && position.X < (Bullet_Hell.Enemy.position.X + texture.Width))
-        //    {
-        //        return true;
-        //    }
-        //    else
-        //    {
-        //        return false;
-        //    }
-        //}
+        public void DetectCollision(List<Enemy> enemies)
+        {
+            for (int i = 0; i < enemies.Count; i++)
+            {
+                if (rectangle.Intersects(enemies[i].GetRectangle()))
+                {
+                    alive = false;
+                }
+            }
+        }
     }
 }
