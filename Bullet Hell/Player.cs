@@ -71,6 +71,11 @@ namespace Bullet_Hell
             spriteBatch.Draw(texture, position, null, color, rotation, offset, scale, SpriteEffects.None, 0);
         }
 
+        public Rectangle GetRectangle()
+        {
+            return rectangle;
+        }
+
         public void DetectCollision(List<Enemy> enemies)
         {
             for (int i = 0; i < enemies.Count; i++)

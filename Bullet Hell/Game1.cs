@@ -19,9 +19,12 @@ namespace Bullet_Hell
 
         Vector2 playerPos;
 
-        List<Rectangle> enemyRectagles;
-
         int numEnemies;
+
+        SpriteFont scoreFont;
+        string scoreSting;
+        float score;
+        int scoreInt;
 
         float health;
         bool show;
@@ -53,6 +56,7 @@ namespace Bullet_Hell
 
             IsMouseVisible = false;
 
+            score = 0;
             health = 1;
             show = true;
 
@@ -82,6 +86,7 @@ namespace Bullet_Hell
             //textures.Add("enemy", Content.Load<Texture2D>("bad"));
             TextureLibrary.LoadTexture(Content, "player");
             TextureLibrary.LoadTexture(Content, "bad");
+            scoreFont = Content.Load<SpriteFont>("Score");
         }
 
         /// <summary>
@@ -110,6 +115,12 @@ namespace Bullet_Hell
             playerPos = mouseState.Position.ToVector2();
 
             player.Update(deltaTime, playerPos, enemies);
+
+            score += deltaTime * 2.3f;
+
+            scoreInt = Convert.ToInt32(score);
+
+            scoreSting = scoreInt.ToString();
 
             for (int i = 0; i < enemies.Count; i++)
             {
@@ -140,6 +151,7 @@ namespace Bullet_Hell
             {
                 enemies[i].Draw(spriteBatch);
             }
+            spriteBatch.DrawString(scoreFont, "Score: " + scoreSting, new Vector2( 10 , 10), Color.Black);
             spriteBatch.End();
             base.Draw(gameTime);
         }
