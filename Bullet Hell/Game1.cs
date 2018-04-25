@@ -34,6 +34,9 @@ namespace Bullet_Hell
 
         Vector2 startPos;
         Random rnd = new Random();
+
+        float enemySpawnTimer;
+        float lastSpawnTime;
         
         public Game1()
         {
@@ -41,6 +44,7 @@ namespace Bullet_Hell
             Content.RootDirectory = "Content";
             graphics.PreferredBackBufferWidth = 580;
             graphics.PreferredBackBufferHeight = 940;
+            this.IsMouseVisible = true;
         }
 
         /// <summary>
@@ -63,13 +67,19 @@ namespace Bullet_Hell
             enemies = new List<Enemy>();
             numEnemies = 5;
 
+            enemySpawnTimer = .5f;
+            lastSpawnTime = 0;
+
+            playerPos = new Vector2(230, 900);
+
             for (int i = 0; i < numEnemies; i++)
             {
                 startPos = new Vector2(rnd.Next(0, 500), 0);
-                enemies.Add(new Enemy(TextureLibrary.GetTexture("bad"), new Vector2(5f, 5f), 0f, 100f, startPos));
+                //enemies.Add(new Enemy(TextureLibrary.GetTexture("bad"), new Vector2(5f, 5f), 0f, 100f, startPos));
+                enemies.Add(new Enemy(TextureLibrary.GetTexture("bad"), new Vector2(5f, 5f), 0, 1000, startPos, 250, 1));
             }
 
-            player = new Player(TextureLibrary.GetTexture("player"), playerPos, new Vector2(5, 5), 200);
+            player = new Player(TextureLibrary.GetTexture("player"), playerPos, 200, new Vector2(5f, 5f), 0, Color.Gray, 1000, 1);
         }
 
         /// <summary>
@@ -114,7 +124,7 @@ namespace Bullet_Hell
 
             playerPos = mouseState.Position.ToVector2();
 
-            player.Update(deltaTime, playerPos, enemies);
+            player.Update(deltaTime, Keyboard.GetState(), Mouse.GetState(), Window.ClientBounds.Size);
 
             score += deltaTime * 2.3f;
 
@@ -124,10 +134,18 @@ namespace Bullet_Hell
 
             for (int i = 0; i < enemies.Count; i++)
             {
-                enemies[i].Update(gameTime, deltaTime);
-
-                player.DetectCollision(enemies);
+                if (enemies[i].GetAlive())
+                {
+                    enemies[i].Update(gameTime, deltaTime, player, Window.ClientBounds.Height);
+                }
+                //player.DetectCollision(enemies);
+                else
+                {
+                    enemies.RemoveAt(i);
+                }
             }
+
+            BulletManager.Update(deltaTime, player, enemies);
 
             base.Update(gameTime);
         }
@@ -152,6 +170,7 @@ namespace Bullet_Hell
                 enemies[i].Draw(spriteBatch);
             }
             spriteBatch.DrawString(scoreFont, "Score: " + scoreSting, new Vector2( 10 , 10), Color.Black);
+            BulletManager.Draw(spriteBatch);
             spriteBatch.End();
             base.Draw(gameTime);
         }
