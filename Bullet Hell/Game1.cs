@@ -58,7 +58,7 @@ namespace Bullet_Hell
             // TODO: Add your initialization logic here
             base.Initialize();
 
-            IsMouseVisible = false;
+            IsMouseVisible = true;
 
             score = 0;
             health = 1;
@@ -76,7 +76,7 @@ namespace Bullet_Hell
             {
                 startPos = new Vector2(rnd.Next(0, 500), 0);
                 //enemies.Add(new Enemy(TextureLibrary.GetTexture("bad"), new Vector2(5f, 5f), 0f, 100f, startPos));
-                enemies.Add(new Enemy(TextureLibrary.GetTexture("bad"), new Vector2(5f, 5f), 0, 1000, startPos, 250, 1));
+                enemies.Add(new Enemy(TextureLibrary.GetTexture("bad"), new Vector2(5f, 5f), 0, 50, startPos, 250, 1));
             }
 
             player = new Player(TextureLibrary.GetTexture("player"), playerPos, 200, new Vector2(5f, 5f), 0, Color.Gray, 1000, 1);

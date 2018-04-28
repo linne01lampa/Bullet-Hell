@@ -20,7 +20,7 @@ namespace Bullet_Hell
         float attackTimer;
         float attackSpeed;
         float attackRange;
-        Vector2 offset;
+        //Vector2 offset;
 
         float time;
         float timeTurn = 1;
@@ -121,6 +121,10 @@ namespace Bullet_Hell
                     position.X += -1;
                     position.Y += 1;
                 }
+            }
+            else
+            {
+                color = Color.Blue;
             }
         }
 
