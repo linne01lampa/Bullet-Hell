@@ -44,7 +44,6 @@ namespace Bullet_Hell
             Content.RootDirectory = "Content";
             graphics.PreferredBackBufferWidth = 580;
             graphics.PreferredBackBufferHeight = 940;
-            this.IsMouseVisible = true;
         }
 
         /// <summary>
@@ -58,7 +57,7 @@ namespace Bullet_Hell
             // TODO: Add your initialization logic here
             base.Initialize();
 
-            IsMouseVisible = false;
+            IsMouseVisible = true;
 
             score = 0;
             health = 1;
@@ -79,7 +78,7 @@ namespace Bullet_Hell
                 enemies.Add(new Enemy(TextureLibrary.GetTexture("bad"), new Vector2(5f, 5f), 0, 1000, startPos, 250, 1));
             }
 
-            player = new Player(TextureLibrary.GetTexture("player"), playerPos, 200, new Vector2(5f, 5f), 0, Color.Gray, 1000, 1);
+            player = new Player(TextureLibrary.GetTexture("player"), playerPos, 200, new Vector2(5f, 5f), 0, Color.Gray, 1000, .5f);
         }
 
         /// <summary>

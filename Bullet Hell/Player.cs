@@ -34,6 +34,7 @@ namespace Bullet_Hell
             moveDir = Vector2.Zero;
             rotation = 0;
             color = playerColor;
+            health = playerHealth;
             rotation = playerRotation;
             rectangle = new Rectangle(position.ToPoint(), (texture.Bounds.Size.ToVector2() * scale).ToPoint());
             alive = true;
@@ -69,7 +70,7 @@ namespace Bullet_Hell
                 attackTimer += deltaTime;
                 if (attackTimer <= attackSpeed)
                 {
-                    attackTimer = deltaTime;
+                    attackTimer += deltaTime;
                 }
 
                 if (mouseState.LeftButton == ButtonState.Pressed && attackTimer >= attackSpeed)
