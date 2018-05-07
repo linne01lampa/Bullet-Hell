@@ -80,6 +80,9 @@ namespace Bullet_Hell
             }
 
             player = new Player(TextureLibrary.GetTexture("player"), playerPos, 200, new Vector2(5f, 5f), 0, Color.Gray, 1000, 1);
+            UserInterface.AddButton(TextureLibrary.GetTexture("Button"), "Continue", Vector2.One, Vector2.One, Window.ClientBounds.Size.ToVector2());
+            UserInterface.AddButton(TextureLibrary.GetTexture("Button"), "Exit", Vector2.One, Vector2.One, Window.ClientBounds.Size.ToVector2());
+
         }
 
         /// <summary>
@@ -96,7 +99,9 @@ namespace Bullet_Hell
             //textures.Add("enemy", Content.Load<Texture2D>("bad"));
             TextureLibrary.LoadTexture(Content, "player");
             TextureLibrary.LoadTexture(Content, "bad");
+            TextureLibrary.LoadTexture(Content, "Button");
             scoreFont = Content.Load<SpriteFont>("Score");
+            UserInterface.LoadSpriteFont(Content, "file");
         }
 
         /// <summary>
@@ -121,10 +126,20 @@ namespace Bullet_Hell
             // TODO: Add your update logic here
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             MouseState mouseState = Mouse.GetState();
-
+            KeyboardState keyboardState = Keyboard.GetState();
             playerPos = mouseState.Position.ToVector2();
 
             player.Update(deltaTime, Keyboard.GetState(), Mouse.GetState(), Window.ClientBounds.Size);
+
+            bool exit = UserInterface.Update(keyboardState, mouseState);
+            if (exit)
+            {
+                Exit();
+            }
+            if (!UserInterface.GetPause())
+            {
+                player.Update(deltaTime, keyboardState, mouseState, Window.ClientBounds.Size);
+            }
 
             score += deltaTime * 2.3f;
 
@@ -171,6 +186,7 @@ namespace Bullet_Hell
             }
             spriteBatch.DrawString(scoreFont, "Score: " + scoreSting, new Vector2( 10 , 10), Color.Black);
             BulletManager.Draw(spriteBatch);
+            UserInterface.Draw(spriteBatch, player);
             spriteBatch.End();
             base.Draw(gameTime);
         }

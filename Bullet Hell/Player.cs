@@ -23,6 +23,7 @@ namespace Bullet_Hell
         float health;
         float attackSpeed;
         float attackTimer;
+        float score;
 
         public Player(Texture2D playerTexture, Vector2 startPosition, float playerSpeed, Vector2 playerScale, float playerRotation, Color playerColor, float playerHealth, float playerAttackSpeed)
         {
@@ -140,6 +141,15 @@ namespace Bullet_Hell
         public Vector2 GetPosition()
         {
             return position;
+        }
+
+        public float GetHealth()
+        {
+            return health;
+        }
+        public float GetScore()
+        {
+            return score;
         }
     }
 }
