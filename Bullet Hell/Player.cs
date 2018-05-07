@@ -35,6 +35,7 @@ namespace Bullet_Hell
             moveDir = Vector2.Zero;
             rotation = 0;
             color = playerColor;
+            health = playerHealth;
             rotation = playerRotation;
             health = playerHealth;
             rectangle = new Rectangle(position.ToPoint(), (texture.Bounds.Size.ToVector2() * scale).ToPoint());
