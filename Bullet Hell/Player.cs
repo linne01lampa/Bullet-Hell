@@ -46,66 +46,69 @@ namespace Bullet_Hell
 
         public void Update(float deltaTime, KeyboardState keyboardState, MouseState mouseState, Point windowSize)
         {
-            if (alive)
+            if (!UserInterface.GetPause())
             {
-                //float pixelToMove = speed * deltaTime;
+                if (alive)
+                {
+                    //float pixelToMove = speed * deltaTime;
 
-                rectangle = new Rectangle(position.ToPoint(), (texture.Bounds.Size.ToVector2() * scale).ToPoint());
+                    rectangle = new Rectangle(position.ToPoint(), (texture.Bounds.Size.ToVector2() * scale).ToPoint());
 
-                if (Keyboard.GetState().IsKeyDown(Keys.W))
-                {
-                    position.Y -= 5;
-                }
-                if (Keyboard.GetState().IsKeyDown(Keys.S))
-                {
-                    position.Y += 5;
-                }
-                if (Keyboard.GetState().IsKeyDown(Keys.D))
-                {
-                    position.X += 5;
-                }
-                if (Keyboard.GetState().IsKeyDown(Keys.A))
-                {
-                    position.X -= 5;
-                }
+                    if (Keyboard.GetState().IsKeyDown(Keys.W))
+                    {
+                        position.Y -= 5;
+                    }
+                    if (Keyboard.GetState().IsKeyDown(Keys.S))
+                    {
+                        position.Y += 5;
+                    }
+                    if (Keyboard.GetState().IsKeyDown(Keys.D))
+                    {
+                        position.X += 5;
+                    }
+                    if (Keyboard.GetState().IsKeyDown(Keys.A))
+                    {
+                        position.X -= 5;
+                    }
 
-                attackTimer += deltaTime;
-                if (attackTimer <= attackSpeed)
-                {
                     attackTimer += deltaTime;
-                }
+                    if (attackTimer <= attackSpeed)
+                    {
+                        attackTimer += deltaTime;
+                    }
 
-                if (mouseState.LeftButton == ButtonState.Pressed && attackTimer >= attackSpeed)
+                    if (mouseState.LeftButton == ButtonState.Pressed && attackTimer >= attackSpeed && alive)
+                    {
+                        Vector2 bulletDir = mouseState.Position.ToVector2() - position;
+                        BulletManager.AddBullet(TextureLibrary.GetTexture("white"), position, bulletDir, 400, new Vector2(.2f, .2f), Bullet.Owner.Player, Color.Blue);
+                        attackTimer = 0;
+                    }
+
+                    #region ye
+                    //moveDir = mousePos - position;
+                    //moveDir.Normalize();
+
+                    //rotation = (float)Math.Atan2(moveDir.Y, moveDir.X);
+
+                    //if (Vector2.Distance(mousePos, position) < pixelToMove)
+                    //{
+                    //    position = mousePos;
+                    //}
+                    //else
+                    //{
+                    //    position += moveDir * pixelToMove;
+                    //}
+
+                    //position = mousePos;
+
+                    //position = new Vector2(10000, 10000);
+                    #endregion
+                    rectangle.Location = (position - offset * scale).ToPoint();
+                }
+                else
                 {
-                    Vector2 bulletDir = mouseState.Position.ToVector2() - position;
-                    BulletManager.AddBullet(TextureLibrary.GetTexture("player"), position, bulletDir, 400, new Vector2(.2f, .2f), Bullet.Owner.Player, Color.White);
-                    attackTimer = 0;
+                    color = Color.Black;
                 }
-
-                #region ye
-                //moveDir = mousePos - position;
-                //moveDir.Normalize();
-
-                //rotation = (float)Math.Atan2(moveDir.Y, moveDir.X);
-
-                //if (Vector2.Distance(mousePos, position) < pixelToMove)
-                //{
-                //    position = mousePos;
-                //}
-                //else
-                //{
-                //    position += moveDir * pixelToMove;
-                //}
-
-                //position = mousePos;
-
-                //position = new Vector2(10000, 10000);
-                #endregion
-                rectangle.Location = (position - offset * scale).ToPoint();
-            }
-            else
-            {
-                color = Color.Black;
             }
         }
 

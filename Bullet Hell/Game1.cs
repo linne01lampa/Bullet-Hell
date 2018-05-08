@@ -20,11 +20,14 @@ namespace Bullet_Hell
         Vector2 playerPos;
 
         int numEnemies;
-
+        Rectangle mainFrame;
         SpriteFont scoreFont;
         string scoreSting;
         float score;
         int scoreInt;
+
+        Vector2 bgPos;
+        Vector2 bgPos2;
 
         float health;
         bool show;
@@ -35,8 +38,8 @@ namespace Bullet_Hell
         Vector2 startPos;
         Random rnd = new Random();
 
-        float enemySpawnTimer;
-        float lastSpawnTime;
+        float spawnEnemyTimer;
+        float spawnEnemy;
         
         public Game1()
         {
@@ -65,10 +68,16 @@ namespace Bullet_Hell
             show = true;
 
             enemies = new List<Enemy>();
-            numEnemies = 5;
+            numEnemies = 3;
 
-            enemySpawnTimer = .5f;
-            lastSpawnTime = 0;
+            spawnEnemy = 3f;
+            spawnEnemyTimer = 0;
+
+            bgPos2 = new Vector2(0, -1080);
+
+            //mainFrame = new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+            mainFrame = new Rectangle(0, 0, 1920, 1080);
+
 
             playerPos = new Vector2(230, 900);
 
@@ -76,10 +85,10 @@ namespace Bullet_Hell
             {
                 startPos = new Vector2(rnd.Next(0, 500), 0);
                 //enemies.Add(new Enemy(TextureLibrary.GetTexture("bad"), new Vector2(5f, 5f), 0f, 100f, startPos));
-                enemies.Add(new Enemy(TextureLibrary.GetTexture("bad"), new Vector2(5f, 5f), 0, 50, startPos, 250, 1));
+                enemies.Add(new Enemy(TextureLibrary.GetTexture("bad"), new Vector2(.4f, .4f), 0, 50, startPos, 350, 1));
             }
 
-            player = new Player(TextureLibrary.GetTexture("player"), playerPos, 200, new Vector2(5f, 5f), 0, Color.Gray, 1000, 1);
+            player = new Player(TextureLibrary.GetTexture("player"), playerPos, 200, new Vector2(.2f, .2f), 0, Color.White, 1000, 1);
             UserInterface.AddButton(TextureLibrary.GetTexture("Button"), "Continue", Vector2.One, Vector2.One, Window.ClientBounds.Size.ToVector2());
             UserInterface.AddButton(TextureLibrary.GetTexture("Button"), "Exit", Vector2.One, Vector2.One, Window.ClientBounds.Size.ToVector2());
 
@@ -102,6 +111,8 @@ namespace Bullet_Hell
             TextureLibrary.LoadTexture(Content, "Button");
             scoreFont = Content.Load<SpriteFont>("Score");
             UserInterface.LoadSpriteFont(Content, "Score");
+            TextureLibrary.LoadTexture(Content, "bg");
+            TextureLibrary.LoadTexture(Content, "white");
         }
 
         /// <summary>
@@ -120,7 +131,7 @@ namespace Bullet_Hell
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.F4))
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.P))
                 Exit();
 
             // TODO: Add your update logic here
@@ -131,6 +142,18 @@ namespace Bullet_Hell
 
             player.Update(deltaTime, Keyboard.GetState(), Mouse.GetState(), Window.ClientBounds.Size);
 
+            bgPos2.Y += 1;
+            bgPos.Y += 1;
+
+            if (bgPos.Y >= 1080)
+            {
+                bgPos.Y = -1080;
+            }
+            if (bgPos2.Y >= 1080)
+            {
+                bgPos2.Y = -1080;
+            }
+
             bool exit = UserInterface.Update(keyboardState, mouseState);
             if (exit)
             {
@@ -139,6 +162,20 @@ namespace Bullet_Hell
             if (!UserInterface.GetPause())
             {
                 player.Update(deltaTime, keyboardState, mouseState, Window.ClientBounds.Size);
+            }
+
+            spawnEnemyTimer += deltaTime;
+            if (spawnEnemyTimer <= spawnEnemy)
+            {
+                spawnEnemyTimer += deltaTime;
+            }
+            if (spawnEnemyTimer >= spawnEnemy)
+            {
+                startPos = new Vector2(rnd.Next(0, 500), 0);
+
+                enemies.Add(new Enemy(TextureLibrary.GetTexture("bad"), new Vector2(.4f, .4f), 0, 50, startPos, 350, 1));
+
+                spawnEnemyTimer = 0;
             }
 
             score += deltaTime * 2.3f;
@@ -176,6 +213,9 @@ namespace Bullet_Hell
             // TODO: Add your drawing code here
 
             spriteBatch.Begin();
+            spriteBatch.Draw(TextureLibrary.GetTexture("bg"), bgPos, mainFrame, Color.White);
+            spriteBatch.Draw(TextureLibrary.GetTexture("bg"), bgPos2, mainFrame, Color.White);
+
             if (show)
             {
                 player.Draw(spriteBatch);
@@ -184,7 +224,7 @@ namespace Bullet_Hell
             {
                 enemies[i].Draw(spriteBatch);
             }
-            spriteBatch.DrawString(scoreFont, "Score: " + scoreSting, new Vector2( 10 , 10), Color.Black);
+            spriteBatch.DrawString(scoreFont, "Score: " + scoreSting, new Vector2( 10 , 10), Color.White);
             BulletManager.Draw(spriteBatch);
             UserInterface.Draw(spriteBatch, player);
             spriteBatch.End();

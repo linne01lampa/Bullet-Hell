@@ -73,7 +73,7 @@ namespace Bullet_Hell
             string playerHealth = "Health: " + player.GetHealth().ToString();
             //string spacing = "   ";
             //string playerScore = "Score" + player.GetScore().ToString();
-            spriteBatch.DrawString(font, playerHealth, new Vector2(400, 0), Color.White);
+            spriteBatch.DrawString(font, playerHealth, new Vector2(400, 10), Color.White);
             if (pause)
             {
                 for (int i = 0; i < buttons.Count; i++)

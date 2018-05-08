@@ -27,6 +27,9 @@ namespace Bullet_Hell
         int turney = 1;
         bool turn;
 
+        float spawnEnemyTimer;
+        float spawnEnemy;
+
         bool alive;
 
         Random rnd;
@@ -50,81 +53,88 @@ namespace Bullet_Hell
             attackSpeed = enemyAttackSpeed;
             attackRange = enemyAttackRange;
             attackTimer = 0;
+            spawnEnemyTimer = 0;
+            spawnEnemy = 5f;
             alive = true;
         }
 
         public void Update(GameTime gameTime, float deltaTime, Player player, int windowHeight)
         {
-            if (alive)
+            if (!UserInterface.GetPause())
             {
-                attackTimer += deltaTime;
-                if (attackTimer <= attackSpeed)
+                if (alive)
                 {
                     attackTimer += deltaTime;
-                }
-
-                if (Vector2.Distance(position, player.GetPosition()) <= attackRange && attackTimer >= attackSpeed)
-                {
-                    BulletManager.AddBullet(TextureLibrary.GetTexture("player"), position, player.GetPosition() - position, 400, new Vector2(.2f, .2f), Bullet.Owner.Enemy, Color.White);
-                    attackTimer = 0;
-                }
-                //attackTimer += deltaTime;
-                //if (attackTimer >= attackSpeed)
-                //{
-                //    bullets.Add(new Bullet(500, TextureLibrary.GetTexture("player"), 10, new Vector2(0, 1), position));
-                //    attackTimer = 0;
-                //}
-
-                rectangle = new Rectangle(position.ToPoint(), (texture.Bounds.Size.ToVector2() * scale).ToPoint());
-
-                //for (int i = 0; i < bullets.Count; i++)
-                //{
-                //    bullets[i].Update(deltaTime);
-                //}
-
-                //timer.Update(gameTime, 2f);
-                if (started == false)
-                {
-                    position = startPos;
-                    started = true;
-                }
-
-                if (position.Y >= GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height - texture.Bounds.Size.Y)
-                {
-                    started = false;
-                }
-                if (time <= 0)
-                {
-                    time = timeTurn;
-                    turney *= -1;
-                    if (turney == 1)
+                    if (attackTimer <= attackSpeed)
                     {
-                        turn = true;
+                        attackTimer += deltaTime;
                     }
-                    else if (turney == -1)
-                    {
-                        turn = false;
-                    }
-                }
-                else if (time > 0)
-                {
-                    time -= (float)gameTime.ElapsedGameTime.TotalSeconds;
-                }
 
-                if (turn == true)
-                {
-                    position.X += 1;
-                    position.Y += 1;
+                    
+
+                    if (Vector2.Distance(position, player.GetPosition()) <= attackRange && attackTimer >= attackSpeed)
+                    {
+                        BulletManager.AddBullet(TextureLibrary.GetTexture("white"), position, player.GetPosition() - position, 400, new Vector2(.2f, .2f), Bullet.Owner.Enemy, Color.Red);
+                        attackTimer = 0;
+                    }
+                    //attackTimer += deltaTime;
+                    //if (attackTimer >= attackSpeed)
+                    //{
+                    //    bullets.Add(new Bullet(500, TextureLibrary.GetTexture("player"), 10, new Vector2(0, 1), position));
+                    //    attackTimer = 0;
+                    //}
+
+                    rectangle = new Rectangle(position.ToPoint(), (texture.Bounds.Size.ToVector2() * scale).ToPoint());
+
+                    //for (int i = 0; i < bullets.Count; i++)
+                    //{
+                    //    bullets[i].Update(deltaTime);
+                    //}
+
+                    //timer.Update(gameTime, 2f);
+                    if (started == false)
+                    {
+                        position = startPos;
+                        started = true;
+                    }
+
+                    if (position.Y >= GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height - texture.Bounds.Size.Y)
+                    {
+                        started = false;
+                    }
+                    if (time <= 0)
+                    {
+                        time = timeTurn;
+                        turney *= -1;
+                        if (turney == 1)
+                        {
+                            turn = true;
+                        }
+                        else if (turney == -1)
+                        {
+                            turn = false;
+                        }
+                    }
+                    else if (time > 0)
+                    {
+                        time -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    }
+
+                    if (turn == true)
+                    {
+                        position.X += 1;
+                        position.Y += 1;
+                    }
+                    else if (turn == false)
+                    {
+                        position.X += -1;
+                        position.Y += 1;
+                    }
                 }
-                else if (turn == false)
+                else
                 {
-                    position.X += -1;
-                    position.Y += 1;
+                    color = Color.Blue;
                 }
-            }
-            else
-            {
-                color = Color.Blue;
             }
         }
 

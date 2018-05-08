@@ -44,8 +44,11 @@ namespace Bullet_Hell
 
         public void Update(float deltaTime)
         {
-            position += dir * speed * deltaTime;
-            rectangle.Location = (position - offest * scale).ToPoint();
+            if (!UserInterface.GetPause())
+            {
+                position += dir * speed * deltaTime;
+                rectangle.Location = (position - offest * scale).ToPoint();
+            }
         }
 
         public void Draw(SpriteBatch spriteBatch)
