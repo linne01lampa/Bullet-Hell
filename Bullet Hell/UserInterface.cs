@@ -7,6 +7,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.Audio;
 
 namespace Bullet_Hell
 {
@@ -68,10 +70,10 @@ namespace Bullet_Hell
 
         public static void Draw(SpriteBatch spriteBatch, Player player)
         {
-            string playerHealth = "Health" + player.GetHealth().ToString();
+            string playerHealth = "Health: " + player.GetHealth().ToString();
             //string spacing = "   ";
             //string playerScore = "Score" + player.GetScore().ToString();
-            spriteBatch.DrawString(font, playerHealth, Vector2.Zero, Color.White);
+            spriteBatch.DrawString(font, playerHealth, new Vector2(400, 0), Color.White);
             if (pause)
             {
                 for (int i = 0; i < buttons.Count; i++)

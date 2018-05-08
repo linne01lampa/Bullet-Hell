@@ -101,7 +101,7 @@ namespace Bullet_Hell
             TextureLibrary.LoadTexture(Content, "bad");
             TextureLibrary.LoadTexture(Content, "Button");
             scoreFont = Content.Load<SpriteFont>("Score");
-            UserInterface.LoadSpriteFont(Content, "file");
+            UserInterface.LoadSpriteFont(Content, "Score");
         }
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace Bullet_Hell
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.F4))
                 Exit();
 
             // TODO: Add your update logic here
