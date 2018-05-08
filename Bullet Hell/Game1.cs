@@ -101,7 +101,7 @@ namespace Bullet_Hell
             TextureLibrary.LoadTexture(Content, "bad");
             TextureLibrary.LoadTexture(Content, "Button");
             scoreFont = Content.Load<SpriteFont>("Score");
-            UserInterface.LoadSpriteFont(Content, "file");
+            UserInterface.LoadSpriteFont(Content, "Score");
         }
 
         /// <summary>
