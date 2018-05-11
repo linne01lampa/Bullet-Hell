@@ -18,7 +18,12 @@ namespace Bullet_Hell
         static SpriteFont font;
         static KeyboardState prevKeyboardState = Keyboard.GetState();
         static List<Button> buttons = new List<Button>();
+        static List<Button> endButtons = new List<Button>();
         static MouseState prevMouseState;
+        
+        public enum GameState { play, exit, restart };
+
+
 
         public static void AddButton(Texture2D texture, string text, Vector2 scale, Vector2 textScale, Vector2 screenSize)
         {
@@ -31,12 +36,17 @@ namespace Bullet_Hell
             font = content.Load<SpriteFont>(fontName);
         }
 
-        public static bool Update(KeyboardState keyboardState, MouseState mouseState)
+        public static GameState Update(KeyboardState keyboardState, MouseState mouseState, Player player)
         {
             bool exit = false;
             if (keyboardState.IsKeyDown(Keys.Escape) && prevKeyboardState.IsKeyUp(Keys.Escape))
             {
                 pause = !pause;
+            }
+
+            if (buttons.Count >= 3)
+            {
+                buttons.RemoveAt(0);
             }
 
             string clickedButton = "";
@@ -52,20 +62,24 @@ namespace Bullet_Hell
                     }
 
                 }
-
             }
+            prevMouseState = mouseState;
+            prevKeyboardState = keyboardState;
             switch (clickedButton)
             {
                 case "Continue":
                     pause = false;
-                    break;
+                    return GameState.play;
+                case "Retry":
+                    pause = false;
+                    return GameState.restart;
                 case "Exit":
                     exit = true;
-                    break;
+                    return GameState.exit;
+                default:
+                    return GameState.play;
             }
-            prevMouseState = mouseState;
-            prevKeyboardState = keyboardState;
-            return exit;
+
         }
 
         public static void Draw(SpriteBatch spriteBatch, Player player)

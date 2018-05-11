@@ -23,7 +23,7 @@ namespace Bullet_Hell
         float health;
         float attackSpeed;
         float attackTimer;
-        float score;
+        //float score;
 
         public Player(Texture2D playerTexture, Vector2 startPosition, float playerSpeed, Vector2 playerScale, float playerRotation, Color playerColor, float playerHealth, float playerAttackSpeed)
         {
@@ -54,19 +54,19 @@ namespace Bullet_Hell
 
                     rectangle = new Rectangle(position.ToPoint(), (texture.Bounds.Size.ToVector2() * scale).ToPoint());
 
-                    if (Keyboard.GetState().IsKeyDown(Keys.W))
+                    if (Keyboard.GetState().IsKeyDown(Keys.W) && position.Y >= 0)
                     {
                         position.Y -= 5;
                     }
-                    if (Keyboard.GetState().IsKeyDown(Keys.S))
+                    if (Keyboard.GetState().IsKeyDown(Keys.S) && position.Y <= 940)
                     {
                         position.Y += 5;
                     }
-                    if (Keyboard.GetState().IsKeyDown(Keys.D))
+                    if (Keyboard.GetState().IsKeyDown(Keys.D) && position.X <= 580)
                     {
                         position.X += 5;
                     }
-                    if (Keyboard.GetState().IsKeyDown(Keys.A))
+                    if (Keyboard.GetState().IsKeyDown(Keys.A) && position.X >= 0)
                     {
                         position.X -= 5;
                     }
@@ -133,6 +133,7 @@ namespace Bullet_Hell
             health += healthMod;
             if (health <= 0)
             {
+                health = 0;
                 alive = false;
             }
         }
@@ -151,9 +152,10 @@ namespace Bullet_Hell
         {
             return health;
         }
-        public float GetScore()
+
+        public bool GetAlive()
         {
-            return score;
+            return alive;
         }
     }
 }
