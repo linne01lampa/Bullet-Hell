@@ -26,6 +26,10 @@ namespace Bullet_Hell
         float score;
         int scoreInt;
 
+        bool powerAttack;
+
+        Shield shield;
+
         Vector2 bgPos;
         Vector2 bgPos2;
         bool once;
@@ -40,6 +44,10 @@ namespace Bullet_Hell
 
         float spawnEnemyTimer;
         float spawnEnemy;
+        Vector2 shieldPos;
+
+        float spawnShieldTimer;
+        float spawnShield;
         
         public Game1()
         {
@@ -61,8 +69,11 @@ namespace Bullet_Hell
             // TODO: Add your initialization logic here
             base.Initialize();
 
+            spawnShieldTimer = 5;
+            spawnShield = 0;
+            //shieldPos = new Vector2(rnd.Next(0, 500), rnd.Next(0, 900));
+            shield = new Shield(TextureLibrary.GetTexture("shield"), Vector2.One, 5, new Vector2(1, 1));
             Reload();
-
         }
 
         /// <summary>
@@ -84,6 +95,8 @@ namespace Bullet_Hell
             UserInterface.LoadSpriteFont(Content, "Score");
             TextureLibrary.LoadTexture(Content, "bg");
             TextureLibrary.LoadTexture(Content, "white");
+            TextureLibrary.LoadTexture(Content, "shield");
+            //UserInterface.AddButton(TextureLibrary.GetTexture("Button"), "Try Again", new Vector2(.5f, .5f), Vector2.One, Window.ClientBounds.Size.ToVector2(), 2);
         }
 
         /// <summary>
@@ -116,8 +129,12 @@ namespace Bullet_Hell
             if (!player.GetAlive() && once == false)
             {
                 once = true;
-                UserInterface.AddButton(TextureLibrary.GetTexture("Button"), "Retry", new Vector2(.5f, .5f), Vector2.One, Window.ClientBounds.Size.ToVector2());
+                UserInterface.AddButton(TextureLibrary.GetTexture("Button"), "Retry", new Vector2(.5f, .5f), Vector2.One, Window.ClientBounds.Size.ToVector2(), 1);
             }
+
+            powerAttack = player.GetPower();
+
+            shieldPos = new Vector2(rnd.Next(0, 500), rnd.Next(0, 900));
 
             if (!UserInterface.GetPause())
             {
@@ -144,6 +161,8 @@ namespace Bullet_Hell
                 case UserInterface.GameState.restart:
                     Reload();
                     break;
+                case UserInterface.GameState.dead:
+                    break;
                 default:
                     break;
             }
@@ -168,6 +187,20 @@ namespace Bullet_Hell
 
                     spawnEnemyTimer = 0;
                 }
+
+                //shield.Update(deltaTime, player);
+
+                //spawnShieldTimer -= deltaTime;
+                //if (spawnShieldTimer >= spawnShield)
+                //{
+                //    spawnShieldTimer -= deltaTime;
+                //}
+                //if (spawnShieldTimer <= spawnShield)
+                //{
+                //    shield.SetPosition(shieldPos);
+
+                //    spawnShieldTimer = 5;
+                //}
             }
 
             if (!UserInterface.GetPause() && player.GetAlive() == true)
@@ -210,7 +243,6 @@ namespace Bullet_Hell
             spriteBatch.Begin();
             spriteBatch.Draw(TextureLibrary.GetTexture("bg"), bgPos, mainFrame, Color.White);
             spriteBatch.Draw(TextureLibrary.GetTexture("bg"), bgPos2, mainFrame, Color.White);
-
             if (show)
             {
                 player.Draw(spriteBatch);
@@ -222,6 +254,21 @@ namespace Bullet_Hell
             spriteBatch.DrawString(scoreFont, "Score: " + scoreSting, new Vector2(10, 10), Color.White);
             BulletManager.Draw(spriteBatch);
             UserInterface.Draw(spriteBatch, player);
+
+            if (spawnShieldTimer <= spawnEnemy)
+            {
+                shield.Draw(spriteBatch);
+            }
+
+            if (powerAttack == true)
+            {
+                spriteBatch.DrawString(scoreFont, "Power = active", new Vector2(180, 10), Color.White);
+            }
+            else if (powerAttack == false)
+            {
+                spriteBatch.DrawString(scoreFont, "Power = down", new Vector2(180, 10), Color.White);
+            }
+
             spriteBatch.End();
             base.Draw(gameTime);
             
@@ -260,8 +307,8 @@ namespace Bullet_Hell
 
             player = new Player(TextureLibrary.GetTexture("player"), playerPos, 200, new Vector2(.5f, .5f), 0, Color.White, 1000, 1);
 
-            UserInterface.AddButton(TextureLibrary.GetTexture("Button"), "Continue", new Vector2(.5f, .5f), Vector2.One, Window.ClientBounds.Size.ToVector2());
-            UserInterface.AddButton(TextureLibrary.GetTexture("Button"), "Exit", new Vector2(.5f, .5f), Vector2.One, Window.ClientBounds.Size.ToVector2());
+            UserInterface.AddButton(TextureLibrary.GetTexture("Button"), "Continue", new Vector2(.5f, .5f), Vector2.One, Window.ClientBounds.Size.ToVector2(), 1);
+            UserInterface.AddButton(TextureLibrary.GetTexture("Button"), "Exit", new Vector2(.5f, .5f), Vector2.One, Window.ClientBounds.Size.ToVector2(), 1);
         }
     }
 }

@@ -21,14 +21,22 @@ namespace Bullet_Hell
         static List<Button> endButtons = new List<Button>();
         static MouseState prevMouseState;
         
-        public enum GameState { play, exit, restart };
+        public enum GameState { play, exit, restart, dead };
 
 
 
-        public static void AddButton(Texture2D texture, string text, Vector2 scale, Vector2 textScale, Vector2 screenSize)
+        public static void AddButton(Texture2D texture, string text, Vector2 scale, Vector2 textScale, Vector2 screenSize, int aliveOrDead)
         {
-            buttons.Add(new Button(texture, Vector2.Zero, text, scale, textScale, font));
-            PlaceButtons(screenSize);
+            if (aliveOrDead == 1)
+            {
+                buttons.Add(new Button(texture, Vector2.Zero, text, scale, textScale, font));
+                PlaceButtons(screenSize);
+            }
+            else if (aliveOrDead == 2)
+            {
+                endButtons.Add(new Button(texture, new Vector2(250, 500), text, scale, textScale, font));
+                PlaceButtons(screenSize);
+            }
         }
 
         public static void LoadSpriteFont(ContentManager content, string fontName)
@@ -63,6 +71,18 @@ namespace Bullet_Hell
 
                 }
             }
+            else if (player.GetAlive() == false)
+            {
+                for (int i = 0; i < buttons.Count; i++)
+                {
+                    bool mouseOverButton = buttons[i].Update(mouseState);
+                    if (mouseOverButton && mouseState.LeftButton == ButtonState.Released && prevMouseState.LeftButton == ButtonState.Pressed)
+                    {
+                        clickedButton = buttons[i].GetButtonText();
+                    }
+
+                }
+            }
             prevMouseState = mouseState;
             prevKeyboardState = keyboardState;
             switch (clickedButton)
@@ -76,6 +96,8 @@ namespace Bullet_Hell
                 case "Exit":
                     exit = true;
                     return GameState.exit;
+                case "Try Again":
+                    return GameState.restart;
                 default:
                     return GameState.play;
             }
@@ -94,6 +116,21 @@ namespace Bullet_Hell
                 {
                     buttons[i].Draw(spriteBatch);
                 }
+            }
+            else if (player.GetAlive() == false)
+            {
+                for (int i = 0; i < buttons.Count; i++)
+                {
+                    buttons[i].Draw(spriteBatch);
+                }
+            }
+        }
+
+        public static void DrawDead(SpriteBatch spriteBatch)
+        {
+            for (int i = 0; i < endButtons.Count; i++)
+            {
+                endButtons[i].Draw(spriteBatch);
             }
         }
 
