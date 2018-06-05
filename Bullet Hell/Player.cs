@@ -23,6 +23,10 @@ namespace Bullet_Hell
         float health;
         float attackSpeed;
         float attackTimer;
+        bool invu;
+        float powerAttackTimer;
+        float powerAttackSpeed;
+        bool powerAttack;
         //float score;
 
         public Player(Texture2D playerTexture, Vector2 startPosition, float playerSpeed, Vector2 playerScale, float playerRotation, Color playerColor, float playerHealth, float playerAttackSpeed)
@@ -42,6 +46,8 @@ namespace Bullet_Hell
             alive = true;
             attackSpeed = playerAttackSpeed;
             attackTimer = 0;
+            powerAttack = false;
+            powerAttackSpeed = 10;
         }
 
         public void Update(float deltaTime, KeyboardState keyboardState, MouseState mouseState, Point windowSize)
@@ -50,6 +56,15 @@ namespace Bullet_Hell
             {
                 if (alive)
                 {
+                    if (Shield.GetActive() == true)
+                    {
+                        invu = true;
+                    }
+                    else
+                    {
+                        invu = false;
+                    }
+
                     //float pixelToMove = speed * deltaTime;
 
                     rectangle = new Rectangle(position.ToPoint(), (texture.Bounds.Size.ToVector2() * scale).ToPoint());
@@ -77,11 +92,35 @@ namespace Bullet_Hell
                         attackTimer += deltaTime;
                     }
 
+                    powerAttackTimer += deltaTime;
+                    if (powerAttackTimer <= powerAttackSpeed)
+                    {
+                        powerAttackTimer += deltaTime;
+                        powerAttack = false;
+                    }
+                    else
+                    {
+                        powerAttack = true;
+                    }
+
                     if (mouseState.LeftButton == ButtonState.Pressed && attackTimer >= attackSpeed && alive)
                     {
                         Vector2 bulletDir = mouseState.Position.ToVector2() - position;
                         BulletManager.AddBullet(TextureLibrary.GetTexture("white"), position, bulletDir, 400, new Vector2(.2f, .2f), Bullet.Owner.Player, Color.Blue);
                         attackTimer = 0;
+                    }
+
+                    if (mouseState.RightButton == ButtonState.Pressed && alive && powerAttackTimer >= powerAttackSpeed)
+                    {
+                        BulletManager.AddBullet(TextureLibrary.GetTexture("white"), position, new Vector2(0, 1), 400, new Vector2(.2f, .2f), Bullet.Owner.Player, Color.Blue);
+                        BulletManager.AddBullet(TextureLibrary.GetTexture("white"), position, new Vector2(0, -1), 400, new Vector2(.2f, .2f), Bullet.Owner.Player, Color.Blue);
+                        BulletManager.AddBullet(TextureLibrary.GetTexture("white"), position, new Vector2(1, 0), 400, new Vector2(.2f, .2f), Bullet.Owner.Player, Color.Blue);
+                        BulletManager.AddBullet(TextureLibrary.GetTexture("white"), position, new Vector2(-1, 0), 400, new Vector2(.2f, .2f), Bullet.Owner.Player, Color.Blue);
+                        BulletManager.AddBullet(TextureLibrary.GetTexture("white"), position, new Vector2(1, 1), 400, new Vector2(.2f, .2f), Bullet.Owner.Player, Color.Blue);
+                        BulletManager.AddBullet(TextureLibrary.GetTexture("white"), position, new Vector2(1, -1), 400, new Vector2(.2f, .2f), Bullet.Owner.Player, Color.Blue);
+                        BulletManager.AddBullet(TextureLibrary.GetTexture("white"), position, new Vector2(-1, -1), 400, new Vector2(.2f, .2f), Bullet.Owner.Player, Color.Blue);
+                        BulletManager.AddBullet(TextureLibrary.GetTexture("white"), position, new Vector2(-1, 1), 400, new Vector2(.2f, .2f), Bullet.Owner.Player, Color.Blue);
+                        powerAttackTimer = 0;
                     }
 
                     #region ye
@@ -130,11 +169,14 @@ namespace Bullet_Hell
 
         public void ChangeHealth(float healthMod)
         {
-            health += healthMod;
-            if (health <= 0)
+            if (invu == false)
             {
-                health = 0;
-                alive = false;
+                health += healthMod;
+                if (health <= 0)
+                {
+                    health = 0;
+                    alive = false;
+                }
             }
         }
 
@@ -156,6 +198,16 @@ namespace Bullet_Hell
         public bool GetAlive()
         {
             return alive;
+        }
+
+        public bool GetInvu()
+        {
+            return invu;
+        }
+
+        public bool GetPower()
+        {
+            return powerAttack;
         }
     }
 }
